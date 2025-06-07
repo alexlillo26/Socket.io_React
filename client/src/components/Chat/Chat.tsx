@@ -26,9 +26,13 @@ const Chat: React.FC = () => {
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
 
+    // Modificación aquí: Pasa el username en la query
     socketRef.current = io('http://localhost:3001', {
       auth: {
         token,
+      },
+      query: { // Añadir la propiedad query
+        username: user?.name, // Asegúrate de que `user.name` esté disponible aquí
       },
     });
 
@@ -47,7 +51,7 @@ const Chat: React.FC = () => {
     return () => {
       socketRef.current?.disconnect();
     };
-  }, []);
+  }, [user?.name]); // Asegúrate de añadir `user.name` como dependencia
 
   useEffect(() => {
     if (chatBodyRef.current) {
